@@ -49,21 +49,46 @@ public class NgoAPI {
 
     public JSONObject getTotalResourceCount(String org) {
         JSONObject json = new JSONObject();
-
+        int rescount = 0;
         try (
             Statement statement = connection.createStatement();
             ResultSet results = statement.executeQuery(
                 "<query goes here>")) {
             while (results.next()) {
                 // use results.XXX() to do stuff
+                int Trescount = results.getInt("Quantity");
+                int rescount;
+                rescount += Trescount;
             }
-            json.put("<name>", null); // use this to put values into JSON object
+            json.put(org, rescount); // use this to put values into JSON object
         } catch (SQLException e) {
             System.err.println("SQL Exception occurred");
             e.printStackTrace();
         }
         return json;
-    } 
+    }
+
+    public JSONObject getResourceCount(String org) {
+        JSONObject json = new JSONObject();
+        String[][] TotalResources;
+        int i = 0;
+        try (
+            Statement statement = connection.createStatement();
+            ResultSet results = statement.executeQuery(
+                "<query goes here>")) {
+            while (results.next()) {
+                // use results.XXX() to do stuff
+                TotalResources[i]=results.getString("Resource");
+                TotalResources[i][]=Integer.toString(results.getInt("Quantity"));
+                i ++;
+            }
+            json.put(org, TotalResources); // use this to put values into JSON object
+        } catch (SQLException e) {
+            System.err.println("SQL Exception occurred");
+            e.printStackTrace();
+        }
+        return json;
+    }
 
 /* ======================================================================== */
 
