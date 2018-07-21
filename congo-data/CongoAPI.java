@@ -29,7 +29,7 @@ public class CongoAPI {
         try {
             Class.forName("org.postgresql.Driver");
 
-            String url = "jdbc:postgresql://db.ecs.vuw.ac.nz/startup-hadr";
+            String url = "jdbc:postgresql://db.ecs.vuw.ac.nz/congo-hadr";
             this.connection = DriverManager.getConnection(url, userid, password);
         } catch (ClassNotFoundException e) {
             System.err.println("Cannot find the PostgreSQL driver. Try checking your CLASSPATH.");

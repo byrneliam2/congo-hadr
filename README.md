@@ -8,8 +8,8 @@ Disaster relief has the potential to suffer from lack of organisation, synergy, 
 We aim to improve HADR operations by proposing **CoNGO**, a specialised data storage platform for disaster relief management. Currently, disaster management offices (DMOs) are responsible for controlling data and resources regarding NGOs and humanitarian services. CoNGO will comprise an underlying database which is accessible via a dedicated API or a supplementary application. The API is designed to be accessible by existing applications already in use by NGOs. Alternatively, the application may be used to get a more natural experience working with the database.
 
 ## My Role
-I was in charge of development and technical validation. I worked closely with designers and UX team members to create prototypes for the database and associated connections. The end result was a visual experience for mentors and judges to view, along with a database and associated API which this repo holds. There is also an Ionic app that shows some of the ideas demonstrated in the visual mockup.
+I was in charge of development and technical validation. I worked closely with designers and UX team members to create prototypes for the database and associated connections. The end result was a visual experience for mentors and judges to view, along with a database and associated API which this repo holds. There is also an Ionic app that shows some of the ideas demonstrated in the visual mockup; not all are implemented due to time restrictions and focus primarily being on the data core.
 
-### References
+### References and Links
 - Thanks to Devdactic for the Ionic tutorial at https://devdactic.com/ionic-side-menu-tabs/
 - F6S site: https://www.f6s.com/profile/2723594/about
