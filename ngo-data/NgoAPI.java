@@ -88,7 +88,36 @@ public class NgoAPI {
             e.printStackTrace();
         }
         return json;
-<<<<<<< HEAD
+    }
+
+    public void updateResourceCount(String org, String resource, String quantity) {
+        try {
+            connection.setAutoCommit(false);
+
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(
+                "UPDATE RESOURCES SET Quantity = " + quantity +
+                "WHERE Organisation = " + org + " AND Resource = " + resource + ";");
+            
+            connection.commit();
+            statement.close();
+        } catch (SQLException e) {
+            System.err.println("SQL Exception occurred");
+            e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                System.err.println("SQL Exception occurred during rollback");
+                e1.printStackTrace();
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println("SQL Exception occurred during setting of auto commit");
+                e.printStackTrace();
+            }
+        }
     }
 
 /* ======================================================================== */
@@ -203,8 +232,6 @@ public class NgoAPI {
             }
         }
         return output.toString();
-=======
->>>>>>> 773b69010ad702b1ff172ce61d58670feb5591cb
     }
 
     public void updateResourceCount(String org, String resource, String quantity) {
