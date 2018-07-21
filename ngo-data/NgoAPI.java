@@ -94,66 +94,10 @@ public class NgoAPI {
         try {
             connection.setAutoCommit(false);
 
-<<<<<<< HEAD
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(
-                "UPDATE RESOURCES SET Quantity = " + quantity +
-                "WHERE Organisation = " + org + " AND Resource = " + resource + ";");
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> 449c70c93f362b4833303a3fa476ba9a02e93887
-            connection.commit();
-            statement.close();
-        } catch (SQLException e) {
-            System.err.println("SQL Exception occurred");
-            e.printStackTrace();
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                System.err.println("SQL Exception occurred during rollback");
-                e1.printStackTrace();
-            }
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                System.err.println("SQL Exception occurred during setting of auto commit");
-                e.printStackTrace();
-            }
-        }
-    }
-
-/* ======================================================================== */
-
-    public void closeDBConnection() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            System.err.println("SQL Exception occurred while closing.");
-            e.printStackTrace();
-        }
-    }
-
-    public String deleteCus(int customerID) {
-        StringBuilder output = new StringBuilder();
-        output.append("Delete Customer:\n\t");
-
-        int loansDeleted = 0;
-
-        try {
-            connection.setAutoCommit(false);
-
-            Statement stmt1 = connection.createStatement();
-            ResultSet results1 = stmt1.executeQuery("SELECT FROM CUSTOMER WHERE " +
-                    "CustomerId = " + customerID + " FOR UPDATE;");
-=======
             Statement statement1 = connection.createStatement();
             ResultSet results1 = statement.executeQuery(
                 "SELECT * FROM RESOURCES " + "WHERE Organisation = " + org + 
                 " AND Resource = " + resource + " FOR UPDATE;");
->>>>>>> 3d16f692c49ddc089f1e2f97f326dbabc9c910fe
 
             if (!results1.next()) {
                 throw new NgoAPIException
@@ -221,9 +165,9 @@ public class NgoAPI {
 
             connection.commit();
 
-            statementt2.close();
+            statement2.close();
             results1.close();
-            statementt1.close();
+            statement1.close();
         } catch (NgoAPIException e) {
             output.append("Error: ").append(e.getMessage());
             try {
