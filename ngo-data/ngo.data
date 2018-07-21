@@ -1,45 +1,45 @@
-Red Cross,Water,200,Drinking water
-OxFam,Water,350,wash
-Amnesty,Tarpaulin,500,shelter
-Amnesty,Taro,500,food
-Red Cross,Tarpaulin,700,shelter
-UN,Yams,1000,food
-Groupx,Hygiene Kits,500,wash
+Red Cross,water,200,drinking water
+OxFam,water,350,wash
+Amnesty,tarpaulin,500,shelter
+Amnesty,taro,500,food
+Red Cross,tarpaulin,700,shelter
+UN,yams,1000,food
+Groupx,hygiene kits,500,wash
 Groupx,food cans,1000,food
-Groupx,Sleeping mats,500,shelter
-Groupt,Med kits,100,medicinal
+Groupx,sleeping mats,500,shelter
+Groupt,med kits,100,medicinal
 Groupt,water,800,wash
-UN,Tarpaulin,500,shelter
-Amnesty,kitchen,sets,100,food
+UN,tarpaulin,500,shelter
+Amnesty,kitchen sets,100,food
 Red Cross,Med kits,100,medicinal
-Amnesty,Shelter tools,50,shelter
-OxFam,Med kits,80,medicinal
-Groupx,Shelter tools,60,shelter
+Amnesty,shelter tools,50,shelter
+OxFam,med kits,80,medicinal
+Groupx,shelter tools,60,shelter
 Amnesty,food cans,500,food
-OxFam,Tarpaulin,50,shelter
-Red Cross,Rice,500,shelter
-Groupx,Rice,400,shelter
-OxFam,Rice,700,shelter
-YY,Yams,500,food
-XXX,Tarpaulin,700,shelter
+OxFam,tarpaulin,50,shelter
+Red Cross,rice,500,shelter
+Groupx,rice,400,shelter
+OxFam,rice,700,shelter
+YY,yams,500,food
+XXX,tarpaulin,700,shelter
 Red Cross,solar power kits,300,power
 Groupt,hygiene kits,700,shelter
 XXX,food cans,1000,food
-Global,Rice,2000,food
-Global,Soap,3000,wash
-Global,Hygiene Kits,1000,wash
-XXX,Tarpaulin,500,shelter
-Global,Med kits,80,medicinal
-Blue Cross,Rice,5000,shelter
+Global,rice,2000,food
+Global,soap,3000,wash
+Global,hygiene kits,1000,wash
+Global,tarpaulin,500,shelter
+Global,med kits,80,medicinal
+Blue Cross,rice,5000,shelter
 Groupx,blankets,700,shelter
-Red Cross,Taro,800,food
+Red Cross,taro,800,food
 XXX,Taro,500,food
-Global,Yams,1000,food
+Global,yams,1000,food
 Groupt,solar power kits,600,power
-UN,Plastic sheets,100,shelter
-Red Cross,Radio sets,500,comm
-OxFam,Radio sets,200,comm
+UN,plastic sheets,100,shelter
+Red Cross,radio sets,500,comm
+OxFam,radio sets,200,comm
 UNICEF,buckets,500,wash
 UNICEF,rice,300,food
-UNICEF,Radio sets,250,comm
+UNICEF,radio sets,250,comm
 Westpac,solar power kits,300,power
