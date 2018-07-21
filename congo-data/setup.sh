@@ -1,4 +1,4 @@
 #!/bin/bash
 
 need postgresql
-psql -d startup-hadr
+psql -d congo-hadr

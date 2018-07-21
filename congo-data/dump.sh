@@ -1,4 +1,4 @@
 #!/bin/bash
 
 need postgresql
-pg_dump startup-hadr > startup-hadr.sql
+pg_dump congo-hadr > congo-hadr.sql
