@@ -2,12 +2,14 @@ import javax.swing.*;
 import java.sql.*;
 import java.time.LocalDate;
 
+import org.json.simple.JSONObject;
+
 @SuppressWarnings("SqlNoDataSourceInspection")
-public class LibraryModel {
+public class NgoAPI {
 
     private Connection connection;
 
-    public LibraryModel(String userid, String password) {
+    public NgoAPI(String userid, String password) {
         getConnection(userid, password);
     }
 
@@ -26,276 +28,26 @@ public class LibraryModel {
 
 /* ======================================================================== */
 
-    public String bookLookup(int isbn) {
-        StringBuilder output = new StringBuilder();
-        output.append("Book Lookup:\n\t");
-        try ( // using try-with-resources to ensure JDBC objects closed when done
-            Statement statement = connection.createStatement();
-            ResultSet results = statement.executeQuery(
-                    "SELECT Title, Surname, Edition_No, NumOfCop, NumLeft" +
-                    " FROM (BOOK_AUTHOR NATURAL JOIN AUTHOR) NATURAL JOIN BOOK " +
-                    "WHERE ISBN = " + isbn + " ORDER BY AuthorSeqNo;")) {
+    public JSONObject getAllOrganisations() {
+        JSONObject json = new JSONObject();
+        ArrayList<String> list = new ArrayList<>();
 
-            if (results.next()) {
-                output.append(isbn).append(": ")
-                        .append(results.getString("Title"))
-                        .append("\n\t")
-                        .append("Edition: ")
-                        .append(results.getInt("Edition_No"))
-                        .append("\n\t")
-                        .append("Number of copies: ")
-                        .append(results.getInt("NumOfCop"))
-                        .append("\n\t")
-                        .append("Copies remaining: ")
-                        .append(results.getInt("NumLeft"))
-                        .append("\n\t")
-                        .append("Authors: ")
-                        .append(results.getString("Surname").trim());
-                while (results.next()) {
-                    output.append(", ");
-                    output.append(results.getString("Surname").trim());
-                }
-            } else {
-                output.append("No book found with ISBN ").append(isbn);
-            }
-        } catch (SQLException e) {
-            System.err.println("SQL Exception occurred during Book Lookup.");
-            e.printStackTrace();
-        }
-        return output.toString();
-    }
-
-    public String showCatalogue() {
-        StringBuilder output = new StringBuilder();
-        output.append("Show Catalogue:\n\t");
         try (
             Statement statement = connection.createStatement();
             ResultSet results = statement.executeQuery(
-                    "SELECT ISBN, Title, Surname, Edition_No, NumOfCop, NumLeft" +
-                            " FROM (BOOK_AUTHOR NATURAL JOIN AUTHOR) NATURAL JOIN BOOK " +
-                            "ORDER BY ISBN;")) {
-
-            int lastISBN = -1;
+                "SELECT UNIQUE Organisation FROM RESOURCES ASC")) {
             while (results.next()) {
-                int isbn = results.getInt("ISBN");
-                if (lastISBN == isbn) {
-                    output.append(", ");
-                    output.append(results.getString("Surname").trim());
-                } else {
-                    if (lastISBN != -1) output.append("\n\n\t");
-                    output.append(isbn)
-                            .append(": ")
-                            .append(results.getString("Title"))
-                            .append("\n\t")
-                            .append("Edition: ")
-                            .append(results.getInt("Edition_No"))
-                            .append("\n\t")
-                            .append("Number of copies: ")
-                            .append(results.getInt("NumOfCop"))
-                            .append("\n\t")
-                            .append("Copies remaining: ")
-                            .append(results.getInt("NumLeft"))
-                            .append("\n\t")
-                            .append("Authors: ")
-                            .append(results.getString("Surname").trim());
-                }
-                lastISBN = isbn;
+                list.add(results.getString("Organisation"));
             }
+            json.put("orgs", list);
         } catch (SQLException e) {
-            System.err.println("SQL Exception occurred during Show Catalogue.");
+            System.err.println("SQL Exception occurred");
             e.printStackTrace();
         }
-        return output.toString();
-    }
+        return json;
+    } 
 
-    public String showLoanedBooks() {
-        StringBuilder output = new StringBuilder();
-        output.append("Show Loaned Books:\n\t");
-        try (
-            Statement statement = connection.createStatement();
-            ResultSet results = statement.executeQuery(
-                    "SELECT ISBN, Title, CustomerId, F_Name, L_Name, DueDate" +
-                            " FROM CUSTOMER " +
-                            "NATURAL JOIN (CUST_BOOK NATURAL JOIN BOOK) " +
-                            "ORDER BY ISBN;")) {
-
-            int lastISBN = -1;
-            if (results.next()) {
-                do {
-                    int isbn = results.getInt("ISBN");
-                    if (lastISBN == isbn) {
-                        output.append("\n\t\t")
-                                .append(results.getString("F_Name").trim())
-                                .append(" ")
-                                .append(results.getString("L_Name").trim())
-                                .append(" (ID " + results.getInt("CustomerId") + ") ")
-                                .append("until " + results.getString("DueDate"));
-                    } else {
-                        if (lastISBN != -1) output.append("\n\n\t");
-                        output.append(isbn)
-                                .append(": ")
-                                .append(results.getString("Title"))
-                                .append("\n\t")
-                                .append("On loan to: ")
-                                .append("\n\t\t")
-                                .append(results.getString("F_Name").trim())
-                                .append(" ")
-                                .append(results.getString("L_Name").trim())
-                                .append(" (ID " + results.getInt("CustomerId") + ") ")
-                                .append("until " + results.getString("DueDate"));
-                    }
-                    lastISBN = isbn;
-                } while (results.next());
-            } else output.append("No books currently on loan.");
-        } catch (SQLException e) {
-            System.err.println("SQL Exception occurred during Show Loaned Books.");
-            e.printStackTrace();
-        }
-        return output.toString();
-    }
-
-    public String showAuthor(int authorID) {
-        StringBuilder output = new StringBuilder();
-        output.append("Show Author:\n\t");
-        try (
-            Statement statement = connection.createStatement();
-            ResultSet results = statement.executeQuery(
-                    "SELECT AUTHOR.AuthorId, Name, Surname, ISBN, Title" +
-                            " FROM AUTHOR LEFT JOIN (BOOK_AUTHOR NATURAL JOIN BOOK) " +
-                            "ON AUTHOR.AuthorId = BOOK_AUTHOR.AuthorId" +
-                            " WHERE AUTHOR.AuthorId = " + authorID +
-                            " ORDER BY ISBN;")) {
-
-            // We use a left join here so that authors with no books published are not omitted
-            // from the final result.
-
-            boolean printed = false;
-            if (results.next()) {
-                do {
-                    if (!printed) {
-                        output.append(results.getInt("AuthorID"))
-                                .append(": ")
-                                .append(results.getString("Name").trim())
-                                .append(" ")
-                                .append(results.getString("Surname").trim())
-                                .append("\n\n\t");
-                        output.append("Books: ")
-                                .append("\n\t");
-                        printed = true;
-                    }
-                    if (results.getString("Title") == null) {
-                        output.append("No books published.");
-                        continue;
-                    }
-                    output.append(results.getInt("ISBN"))
-                            .append(": ")
-                            .append(results.getString("Title"));
-                    output.append("\n\t");
-                } while (results.next());
-            } else output.append("No author found with ID " + authorID);
-        } catch (SQLException e) {
-            System.err.println("SQL Exception occurred during Show Author.");
-            e.printStackTrace();
-        }
-        return output.toString();
-    }
-
-    public String showAllAuthors() {
-        StringBuilder output = new StringBuilder();
-        output.append("Show All Authors:\n\t");
-        try (
-            Statement statement = connection.createStatement();
-            ResultSet results = statement.executeQuery(
-                    "SELECT * FROM AUTHOR ORDER BY AuthorId;")) {
-
-            while (results.next()) {
-                int id = results.getInt("AuthorId");
-                if (id <= 0) continue;
-                    output.append(id)
-                            .append(": ")
-                            .append(results.getString("Name").trim())
-                            .append(" ")
-                            .append(results.getString("Surname").trim())
-                            .append("\n\t");
-            }
-        } catch (SQLException e) {
-            System.err.println("SQL Exception occurred during Show All Authors.");
-            e.printStackTrace();
-        }
-        return output.toString();
-    }
-
-    public String showCustomer(int customerID) {
-        StringBuilder output = new StringBuilder();
-        output.append("Show Customer:\n\t");
-        try (
-            Statement statement = connection.createStatement();
-            ResultSet results = statement.executeQuery(
-                    "SELECT CUSTOMER.CustomerId, F_Name, L_Name, ISBN, Title" +
-                            " FROM CUSTOMER LEFT JOIN (CUST_BOOK NATURAL JOIN BOOK) " +
-                            "ON CUSTOMER.CustomerId = CUST_BOOK.CustomerId" +
-                            " WHERE CUSTOMER.CustomerId = " + customerID +
-                            " ORDER BY ISBN;")) {
-
-            boolean printed = false;
-            if (results.next()) {
-                do {
-                    if (!printed) {
-                        output.append(results.getInt("CustomerID"))
-                                .append(": ")
-                                .append(results.getString("F_Name").trim())
-                                .append(" ")
-                                .append(results.getString("L_Name").trim())
-                                .append("\n\n\t");
-                        output.append("Books loaned: ")
-                                .append("\n\t");
-                        printed = true;
-                    }
-                    if (results.getString("Title") == null) {
-                        output.append("No books loaned.");
-                        continue;
-                    }
-                    output.append(results.getInt("ISBN"))
-                            .append(": ")
-                            .append(results.getString("Title"));
-                    output.append("\n\t");
-                } while (results.next());
-            } else output.append("No customer found with ID " + customerID);
-        } catch (SQLException e) {
-            System.err.println("SQL Exception occurred during Show Customer");
-            e.printStackTrace();
-        }
-        return output.toString();
-    }
-
-    public String showAllCustomers() {
-        StringBuilder output = new StringBuilder();
-        output.append("Show All Customers:\n\t");
-        try (
-            Statement statement = connection.createStatement();
-            ResultSet results = statement.executeQuery(
-                    "SELECT * FROM CUSTOMER ORDER BY CustomerId;")) {
-
-            while (results.next()) {
-                int id = results.getInt("CustomerId");
-                if (id <= 0) continue;
-                output.append(id)
-                        .append(": ")
-                        .append(results.getString("L_Name").trim())
-                        .append(", ")
-                        .append(results.getString("F_Name").trim())
-                        .append("\n\tCity: ")
-                        .append(results.getString("City").trim())
-                        .append("\n\n\t");
-            }
-        } catch (SQLException e) {
-            System.err.println("SQL Exception occurred during Show All Customers.");
-            e.printStackTrace();
-        }
-        return output.toString();
-    }
-
-    /* ========================================= STATE CHANGING ============================================ */
+/* ======================================================================== */
 
     public String borrowBook(int isbn, int customerID,
                              int day, int month, int year) {
@@ -771,17 +523,6 @@ public class LibraryModel {
             }
         }
         return output.toString();
-    }
-
-    /* ===================================================================================================== */
-
-    /* For neat handling of problems in state-changing methods. */
-    class LibraryException extends Exception {
-
-        LibraryException(String message) {
-            super(message);
-        }
-
     }
 
 }
