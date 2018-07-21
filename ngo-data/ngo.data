@@ -1,16 +1,9 @@
-Mockup data
-
-Date
-dd/mm/yy
-
-Organisation	Resource		Quantity	Need Satisfaction
-
 Red Cross	Water	200	Drinking water
 OxFam Water	350	wash
 Amnesty	Tarpaulin	500	shelter
 Amnesty	Taro  500	food
 Red Cross	Tarpaulin	700	shelter
-UN  Yams	500	food
+UN  Yams	1000	food
 Groupx	Hygiene Kits 500	wash
 Groupx	food cans	1000	food
 Groupx	Sleeping mats	500	shelter
@@ -20,31 +13,29 @@ UN	Tarpaulin	500	shelter
 Amnesty	kitchen sets	100	food
 Red Cross	Med kits	100	medicinal
 Amnesty	Shelter tools	50	shelter
-Oxfam	Med kits	80	medicinal
-groupx	Shelter tools	60	shelter
+OxFam	Med kits	80	medicinal
+Groupx	Shelter tools	60	shelter
 Amnesty	food cans	500	food
 OxFam	Tarpaulin	50	shelter
 Red Cross Rice	500	shelter
 Groupx	Rice	400	shelter
 OxFam	Rice	700	shelter
-UN	Yams	500	food
-UN	Tarpaulin	500	shelter
-Red Cross	Tarpaulin	700	shelter
+YY	Yams	500	food
+XXX	Tarpaulin	700	shelter
 Red Cross solar power kits	300		power
 Groupt	hygiene kits	700	shelter
-Groupx	food cans	1000	food
+XXX	food cans	1000	food
 Global  Rice  2000  food
 Global  Soap  3000  wash
 Global  Hygiene Kits  1000  wash
-UN	Tarpaulin	500	shelter
-Oxfam	Med kits	80	medicinal
-Red Cross Rice	500	shelter
+XXX	Tarpaulin	500	shelter
+Global	Med kits	80	medicinal
+Blue Cross Rice	500	shelter
 Groupx	blankets 700	shelter
 Red Cross	Taro  800	food
-Amnesty	Taro  500	food
+XXX	Taro  500	food
 Global	Yams  1000	food
 Groupt  solar power kits  600 power
-Red Cross	Tarpaulin	700	shelter
 UN	Plastic sheets	100	shelter
 Red Cross Radio sets  500 comm
 OxFam Radio sets  200 comm
