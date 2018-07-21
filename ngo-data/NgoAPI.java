@@ -29,7 +29,7 @@ public class NgoAPI {
         try {
             Class.forName("org.postgresql.Driver");
 
-            String url = "jdbc:postgresql://db.ecs.vuw.ac.nz/" + userid + "_jdbc";
+            String url = "jdbc:postgresql://db.ecs.vuw.ac.nz/startup-hadr";
             this.connection = DriverManager.getConnection(url, userid, password);
         } catch (ClassNotFoundException e) {
             System.err.println("Cannot find the PostgreSQL driver. Try checking your CLASSPATH.");
