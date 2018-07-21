@@ -9,3 +9,6 @@ We aim to improve HADR operations by proposing a specialised data storage platfo
 
 ## My Role
 I was in charge of development and technical validation. I worked closely with designers and UX team members to create prototypes for the database and associated connections. 
+
+### References
+Thanks to Devdactic for the Ionic tutorial at https://devdactic.com/ionic-side-menu-tabs/
