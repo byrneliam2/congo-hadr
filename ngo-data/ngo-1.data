@@ -11,7 +11,7 @@ Groupt,med kits,100,medicinal
 Groupt,water,800,wash
 UN,tarpaulin,500,shelter
 Amnesty,kitchen sets,100,food
-Red Cross,Med kits,100,medicinal
+Red Cross,med kits,100,medicinal
 Amnesty,shelter tools,50,shelter
 OxFam,med kits,80,medicinal
 Groupx,shelter tools,60,shelter
@@ -33,7 +33,7 @@ Global,med kits,80,medicinal
 Blue Cross,rice,5000,shelter
 Groupx,blankets,700,shelter
 Red Cross,taro,800,food
-XXX,Taro,500,food
+XXX,taro,500,food
 Global,yams,1000,food
 Groupt,solar power kits,600,power
 UN,plastic sheets,100,shelter
