@@ -90,10 +90,11 @@ public class NgoAPI {
         return json;
     }
 
-    public void updateResourceCount(String org, String resource, String quantity) {
+    public void updateResourceCount(String org, String resource, int quantity) {
         try {
             connection.setAutoCommit(false);
 
+<<<<<<< HEAD
             Statement statement = connection.createStatement();
             statement.executeUpdate(
                 "UPDATE RESOURCES SET Quantity = " + quantity +
@@ -147,52 +148,83 @@ public class NgoAPI {
             Statement stmt1 = connection.createStatement();
             ResultSet results1 = stmt1.executeQuery("SELECT FROM CUSTOMER WHERE " +
                     "CustomerId = " + customerID + " FOR UPDATE;");
+=======
+            Statement statement1 = connection.createStatement();
+            ResultSet results1 = statement.executeQuery(
+                "SELECT * FROM RESOURCES " + "WHERE Organisation = " + org + 
+                " AND Resource = " + resource + " FOR UPDATE;");
+>>>>>>> 3d16f692c49ddc089f1e2f97f326dbabc9c910fe
 
             if (!results1.next()) {
-                throw new LibraryException
-                        ("Customer with ID " + customerID + " does not exist in database");
+                throw new NgoAPIException
+                        ("Resource record does not exist with values [org = " + org +
+                        ", resource = " + resource + "]");
             }
 
-            Statement stmt2 = connection.createStatement();
-            ResultSet results2 = stmt2.executeQuery("SELECT * FROM CUST_BOOK " +
-                    "WHERE CustomerId = " + customerID + " FOR UPDATE;");
+            Statement statement2 = connection.createStatement();
+            statement2.executeUpdate(
+                "UPDATE RESOURCES SET Quantity = " + quantity +
+                "WHERE Organisation = " + org + " AND Resource = " + resource + ";");
+            
+            connection.commit();
 
-            if (results2.next()) {
-                do {
-                    Statement stmt2a = connection.createStatement();
-                    stmt2a.executeUpdate("UPDATE BOOK SET NumLeft = (NumLeft + 1) " +
-                            "WHERE ISBN = " + results2.getInt("ISBN") + ";");
-                    stmt2a.close();
-                } while (results2.next());
-                loansDeleted = stmt2.executeUpdate("DELETE FROM CUST_BOOK " +
-                        "WHERE CustomerId = " + customerID + ";");
+            statement2.close();
+            results1.close();
+            statement1.close();
+        } catch (NgoAPIException e) {
+            output.append("Error: ").append(e.getMessage());
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                System.err.println("SQL Exception occurred during rollback");
+                e1.printStackTrace();
+            }
+            return output.toString();
+        } catch (SQLException e) {
+            System.err.println("SQL Exception occurred");
+            e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                System.err.println("SQL Exception occurred during rollback");
+                e1.printStackTrace();
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println("SQL Exception occurred during setting of auto commit");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public String deleteResourceRecord(String org, String resource) {
+        try {
+            connection.setAutoCommit(false);
+
+            Statement statement1 = connection.createStatement();
+            ResultSet results1 = statement.executeQuery(
+                "SELECT * FROM RESOURCES " + "WHERE Organisation = " + org + 
+                " AND Resource = " + resource + " FOR UPDATE;");
+
+            if (!results1.next()) {
+                throw new NgoAPIException
+                        ("Resource record does not exist with values [org = " + org +
+                        ", resource = " + resource + "]");
             }
 
-            int pane = JOptionPane.showConfirmDialog(dialogParent, "Confirm customer delete?",
-                    "Are You Sure?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (pane == JOptionPane.NO_OPTION || pane == JOptionPane.CANCEL_OPTION) {
-                throw new LibraryException("Operation cancelled by user.");
-            }
-
-            Statement stmt3 = connection.createStatement();
-            stmt3.executeUpdate("DELETE FROM CUSTOMER " +
-                    "WHERE CustomerId = " + customerID + ";");
-            output.append("Customer with ID ")
-                    .append(customerID)
-                    .append(" has been deleted.")
-                    .append("\n\t")
-                    .append(loansDeleted)
-                    .append(" loans were also recorded as returned.")
-                    .append("\n\t");
+            Statement statement2 = connection.createStatement();
+            statement2.executeUpdate("DELETE FROM RESOURCES " +
+                    "WHERE Organisation = " + org + 
+                    " AND Resource = " + resource + ";");
 
             connection.commit();
 
-            stmt3.close();
-            results2.close();
-            stmt2.close();
+            statementt2.close();
             results1.close();
-            stmt1.close();
-        } catch (LibraryException e) {
+            statementt1.close();
+        } catch (NgoAPIException e) {
             output.append("Error: ").append(e.getMessage());
             try {
                 connection.rollback();
@@ -221,184 +253,22 @@ public class NgoAPI {
         return output.toString();
     }
 
-    public String deleteAuthor(int authorID) {
-        StringBuilder output = new StringBuilder();
-        output.append("Delete Author:\n\t");
+/* ======================================================================== */
 
-        int authDeleted = 0;
-
+    public void closeDBConnection() {
         try {
-            connection.setAutoCommit(false);
-
-            Statement stmt1 = connection.createStatement();
-            ResultSet results1 = stmt1.executeQuery("SELECT FROM AUTHOR WHERE " +
-                    "AuthorId = " + authorID + " FOR UPDATE;");
-
-            if (!results1.next()) {
-                throw new LibraryException
-                        ("Author with ID " + authorID + " does not exist in database");
-            }
-
-            Statement stmt2 = connection.createStatement();
-            ResultSet results2 = stmt2.executeQuery("SELECT * FROM BOOK_AUTHOR " +
-                    "WHERE AuthorId = " + authorID + " FOR UPDATE;");
-
-            if (results2.next()) {
-                authDeleted = stmt2.executeUpdate("DELETE FROM BOOK_AUTHOR " +
-                        "WHERE AuthorId = " + authorID + ";");
-            }
-
-            int pane = JOptionPane.showConfirmDialog(dialogParent, "Confirm author delete?",
-                    "Are You Sure?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (pane == JOptionPane.NO_OPTION || pane == JOptionPane.CANCEL_OPTION) {
-                throw new LibraryException("Operation cancelled by user.");
-            }
-
-            Statement stmt3 = connection.createStatement();
-            stmt3.executeUpdate("DELETE FROM AUTHOR " +
-                    "WHERE AuthorId = " + authorID + ";");
-            output.append("Author with ID ")
-                    .append(authorID)
-                    .append(" has been deleted.")
-                    .append("\n\t")
-                    .append(authDeleted)
-                    .append(" author records were also deleted.")
-                    .append("\n\t");
-
-            connection.commit();
-
-            stmt3.close();
-            results2.close();
-            stmt2.close();
-            results1.close();
-            stmt1.close();
-        } catch (LibraryException e) {
-            output.append("Error: ").append(e.getMessage());
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                System.err.println("SQL Exception occurred during rollback");
-                e1.printStackTrace();
-            }
-            return output.toString();
+            connection.close();
         } catch (SQLException e) {
-            System.err.println("SQL Exception occurred during Delete Author");
+            System.err.println("SQL Exception occurred while closing.");
             e.printStackTrace();
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                System.err.println("SQL Exception occurred during rollback");
-                e1.printStackTrace();
-            }
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                System.err.println("SQL Exception occurred during setting of auto commit");
-                e.printStackTrace();
-            }
         }
-        return output.toString();
     }
 
-    public String deleteBook(int isbn) {
-        StringBuilder output = new StringBuilder();
-        output.append("Delete Book:\n\t");
+    class NgoAPIException extends Exception {
 
-        int authDeleted = 0;
-        int loansDeleted = 0;
-
-        try {
-            connection.setAutoCommit(false);
-
-            Statement stmt1 = connection.createStatement();
-            ResultSet results1 = stmt1.executeQuery("SELECT FROM BOOK WHERE " +
-                    "ISBN = " + isbn + " FOR UPDATE;");
-
-            if (!results1.next()) {
-                throw new LibraryException
-                        ("Book with ISBN " + isbn + " does not exist in database");
-            }
-
-            Statement stmt2 = connection.createStatement();
-            ResultSet results2 = stmt2.executeQuery("SELECT * FROM BOOK_AUTHOR " +
-                    "WHERE ISBN = " + isbn + " FOR UPDATE;");
-
-            if (results2.next()) {
-                authDeleted = stmt2.executeUpdate("DELETE FROM BOOK_AUTHOR " +
-                        "WHERE ISBN = " + isbn + ";");
-            }
-
-            Statement stmt3 = connection.createStatement();
-            ResultSet results3 = stmt3.executeQuery("SELECT FROM CUST_BOOK WHERE " +
-                    "ISBN = " + isbn + " FOR UPDATE;");
-
-            if (results3.next()) {
-                do {
-                    Statement stmt3a = connection.createStatement();
-                    stmt3a.executeUpdate("UPDATE BOOK SET NumLeft = (NumLeft + 1) " +
-                            "WHERE ISBN = " + isbn + ";");
-                    stmt3a.close();
-                } while (results3.next());
-                loansDeleted = stmt3.executeUpdate("DELETE FROM CUST_BOOK " +
-                        "WHERE ISBN = " + isbn + ";");
-            }
-
-            int pane = JOptionPane.showConfirmDialog(dialogParent, "Confirm book delete?",
-                    "Are You Sure?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (pane == JOptionPane.NO_OPTION || pane == JOptionPane.CANCEL_OPTION) {
-                throw new LibraryException("Operation cancelled by user.");
-            }
-
-            Statement stmt4 = connection.createStatement();
-            stmt4.executeUpdate("DELETE FROM BOOK " +
-                    "WHERE ISBN = " + isbn + ";");
-            output.append("Book with ISBN ")
-                    .append(isbn)
-                    .append(" has been deleted.")
-                    .append("\n\t")
-                    .append(authDeleted)
-                    .append(" author records were also deleted.")
-                    .append("\n\t")
-                    .append(loansDeleted)
-                    .append(" loans were also recorded as returned.")
-                    .append("\n\t");
-
-            connection.commit();
-
-            stmt4.close();
-            stmt3.close();
-            results2.close();
-            stmt2.close();
-            results1.close();
-            stmt1.close();
-        } catch (LibraryException e) {
-            output.append("Error: ").append(e.getMessage());
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                System.err.println("SQL Exception occurred during rollback");
-                e1.printStackTrace();
-            }
-            return output.toString();
-        } catch (SQLException e) {
-            System.err.println("SQL Exception occurred during Delete Book");
-            e.printStackTrace();
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                System.err.println("SQL Exception occurred during rollback");
-                e1.printStackTrace();
-            }
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                System.err.println("SQL Exception occurred during setting of auto commit");
-                e.printStackTrace();
-            }
+        NgoAPIException(String message) {
+            super(message);
         }
-        return output.toString();
     }
 
 }
