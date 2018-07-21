@@ -1,4 +1,4 @@
-# startup-hadr
+# congo-hadr
 Repo for prototypes as part of Techstars Startup Weekend Wellington 2018. The theme is humanitarian assistance and disaster relief (HADR.)
 
 ## The Problem
