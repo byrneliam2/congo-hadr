@@ -98,7 +98,11 @@ public class NgoAPI {
             statement.executeUpdate(
                 "UPDATE RESOURCES SET Quantity = " + quantity +
                 "WHERE Organisation = " + org + " AND Resource = " + resource + ";");
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 449c70c93f362b4833303a3fa476ba9a02e93887
             connection.commit();
             statement.close();
         } catch (SQLException e) {
