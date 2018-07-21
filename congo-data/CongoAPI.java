@@ -5,10 +5,10 @@ import java.time.LocalDate;
 import org.json.simple.JSONObject;
 
 /**
- * Java API for NGO database service. Allows operations on data, including
+ * Java API for CoNGO database service. Allows operations on data, including
  * generic queries, updating data and deleting records.
  */
-public class NgoAPI {
+public class CongoAPI {
 
     private Connection connection;
 
@@ -17,7 +17,7 @@ public class NgoAPI {
      * far more secure! This may not even be needed since a private system
      * would be used as opposed to an existing enterprise system.
      */
-    public NgoAPI(String userid, String password) {
+    public CongoAPI(String userid, String password) {
         getConnection(userid, password);
     }
 
@@ -124,7 +124,7 @@ public class NgoAPI {
                 " AND Resource = " + resource + " FOR UPDATE;");
 
             if (!results1.next()) {
-                throw new NgoAPIException
+                throw new CongoAPIException
                         ("Resource record does not exist with values [org = " + org +
                         ", resource = " + resource + "]");
             }
@@ -139,7 +139,7 @@ public class NgoAPI {
             statement2.close();
             results1.close();
             statement1.close();
-        } catch (NgoAPIException e) {
+        } catch (CongoAPIException e) {
             output.append("Error: ").append(e.getMessage());
             try {
                 connection.rollback();
@@ -182,7 +182,7 @@ public class NgoAPI {
                 " AND Resource = " + resource + " FOR UPDATE;");
 
             if (!results1.next()) {
-                throw new NgoAPIException
+                throw new CongoAPIException
                         ("Resource record does not exist with values [org = " + org +
                         ", resource = " + resource + "]");
             }
@@ -197,7 +197,7 @@ public class NgoAPI {
             statement2.close();
             results1.close();
             statement1.close();
-        } catch (NgoAPIException e) {
+        } catch (CongoAPIException e) {
             output.append("Error: ").append(e.getMessage());
             try {
                 connection.rollback();
@@ -240,9 +240,9 @@ public class NgoAPI {
     /**
      * Custom exception to handle missing value cases.
      */
-    class NgoAPIException extends Exception {
+    class CongoAPIException extends Exception {
 
-        NgoAPIException(String message) {
+        CongoAPIException(String message) {
             super(message);
         }
     }
