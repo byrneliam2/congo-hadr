@@ -35,7 +35,7 @@ public class NgoAPI {
         try (
             Statement statement = connection.createStatement();
             ResultSet results = statement.executeQuery(
-                "SELECT UNIQUE Organisation FROM RESOURCES ASC")) {
+                "SELECT DISTINCT Organisation FROM RESOURCES ORDER BY Organisation ASC;")) {
             while (results.next()) {
                 list.add(results.getString("Organisation"));
             }
@@ -88,6 +88,7 @@ public class NgoAPI {
             e.printStackTrace();
         }
         return json;
+<<<<<<< HEAD
     }
 
 /* ======================================================================== */
@@ -202,79 +203,23 @@ public class NgoAPI {
             }
         }
         return output.toString();
+=======
+>>>>>>> 773b69010ad702b1ff172ce61d58670feb5591cb
     }
 
-    public String returnBook(int isbn, int customerID) {
-        StringBuilder output = new StringBuilder();
-        output.append("Return Book:\n\t");
-
+    public void updateResourceCount(String org, String resource, String quantity) {
         try {
             connection.setAutoCommit(false);
 
-            Statement stmt1 = connection.createStatement();
-            ResultSet results1 = stmt1.executeQuery("SELECT * FROM CUSTOMER " +
-                    "WHERE CustomerId = " + customerID + " FOR UPDATE;");
-
-            if (!results1.next()) {
-                throw new LibraryException
-                        ("Customer with ID " + customerID + " does not exist in database");
-            }
-
-            Statement stmt2 = connection.createStatement();
-            ResultSet results2 = stmt2.executeQuery("SELECT * FROM BOOK " +
-                    "WHERE ISBN = " + isbn + " FOR UPDATE;");
-
-            if (!results2.next()) {
-                throw new LibraryException
-                        ("Book with ISBN " + isbn + " does not exist in database");
-            }
-
-            if (!connection.createStatement().executeQuery("SELECT FROM CUST_BOOK WHERE ISBN = "
-                    + isbn + " AND CustomerId = " + customerID + ";").next()) {
-                throw new LibraryException
-                        ("Customer does not have a copy of this book on loan.");
-            }
-
-            Statement stmt3 = connection.createStatement();
-            stmt3.executeUpdate("DELETE FROM CUST_BOOK WHERE ISBN = "
-                    + isbn + " AND CustomerId = " + customerID + ";");
-
-            int pane = JOptionPane.showConfirmDialog(dialogParent, "Confirm book return?",
-                    "Are You Sure?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (pane == JOptionPane.NO_OPTION || pane == JOptionPane.CANCEL_OPTION) {
-                throw new LibraryException("Operation cancelled by user.");
-            }
-
-            Statement stmt4 = connection.createStatement();
-            stmt4.executeUpdate("UPDATE BOOK SET NumLeft = (NumLeft + 1) " +
-                    "WHERE ISBN = " + isbn + ";");
-            output.append(isbn)
-                    .append(": ")
-                    .append(results2.getString("Title").trim())
-                    .append(" - ")
-                    .append(results2.getInt("NumLeft") + 1)
-                    .append(" copies remaining.")
-                    .append("\n\t");
-
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(
+                "UPDATE RESOURCES SET Quantity = " + quantity +
+                "WHERE Organisation = " + org + " AND Resource = " + resource + ";");
+            
             connection.commit();
-
-            stmt4.close();
-            stmt3.close();
-            results2.close();
-            stmt2.close();
-            results1.close();
-            stmt1.close();
-        } catch (LibraryException e) {
-            output.append("Error: ").append(e.getMessage());
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                System.err.println("SQL Exception occurred during rollback");
-                e1.printStackTrace();
-            }
-            return output.toString();
+            statement.close();
         } catch (SQLException e) {
-            System.err.println("SQL Exception occurred during Borrow Book");
+            System.err.println("SQL Exception occurred");
             e.printStackTrace();
             try {
                 connection.rollback();
@@ -290,8 +235,9 @@ public class NgoAPI {
                 e.printStackTrace();
             }
         }
-        return output.toString();
     }
+
+/* ======================================================================== */
 
     public void closeDBConnection() {
         try {
