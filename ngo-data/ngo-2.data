@@ -1,46 +1,45 @@
-organisation,resource,quantity,description,location
-Red Cross,water,200,drinking water,tenmaru
-OxFam,water,350,wash,norsup
-Amnesty,tarpaulin,500,shelter,malekula
-Amnesty,taro,500,food,tenmaru
-Red Cross,tarpaulin,700,shelter,melip
-UN,yams,1000,food,bunlap
-Groupx,hygiene Kits,500,wash,wuro
-Groupx,food cans,1000,food,lamap
-Groupx,sleeping mats,500,shelter,leume
-Groupt,med kits,100,medicinal,lamap
-Groupt,water,800,wash,fanla
-UN,tarpaulin,500,shelter,fanla
-Amnesty,kitchen,sets,100,food,malekula
-Red Cross,med kits,100,medicinal,bunlap
-Amnesty,Shelter tools,50,shelter,ambrym
-OxFam,med kits,80,medicinal,wuro
-Groupx,Shelter tools,60,shelter,leume
-Amnesty,food cans,500,food,melip
-OxFam,tarpaulin,50,shelter,tenmaru
-Red Cross,rice,500,shelter,wuro
-Groupx,rice,400,shelter,norsup
-OxFam,rice,700,shelter,melip
-YY,yams,500,food,ambrym
-XXX,tarpaulin,700,shelter,norsup
-Red Cross,solar power kits,300,power,tenmaru
-Groupt,hygiene kits,700,shelter,fanla
-XXX,food cans,1000,food,wuro
-Global,rice,2000,food,wuro
-Global,soap,3000,wash,ambrym
-Global,hygiene Kits,1000,wash,bunlap
-XXX,tarpaulin,500,shelter,malekula
-Global,med kits,80,medicinal,norsup
-Blue Cross,rice,5000,shelter,leume
-Groupx,blankets,700,shelter,lamap
-Red Cross,taro,800,food,fanla
-XXX,taro,500,food,bunlap
-Global,yams,1000,food,ambrym
-Groupt,solar power kits,600,power,bunlap
-UN,plastic sheets,100,shelter,fanla
-Red Cross,radio sets,500,comm,malekula
-OxFam,radio sets,200,comm,fanla
-UNICEF,buckets,500,wash,wuro
-UNICEF,rice,300,food,wuro
-UNICEF,radio sets,250,comm,fanla
-Westpac,solar power kits,300,power,wuro
+Red Cross,water,200,Tenmaru
+OxFam,water,350,Norsup
+Amnesty,tarpaulin,500,Malekula
+Amnesty,taro,500,Tenmaru
+Red Cross,tarpaulin,700,Melip
+UN,yams,1000,Bunlap
+Groupx,hygiene kits,500,Wuro
+Groupx,food cans,1000,Lamap
+Groupx,sleeping mats,500,Leume
+Groupt,med kits,100,Lamap
+Groupt,water,800,Fanla
+UN,tarpaulin,500,Fanla
+Amnesty,kitchen sets,100,Malekula
+Red Cross,med kits,100,Bunlap
+Amnesty,shelter tools,50,Ambrym
+OxFam,med kits,80,Wuro
+Groupx,shelter tools,60,Leume
+Amnesty,food cans,500,Melip
+OxFam,tarpaulin,50,Tenmaru
+Red Cross,rice,500,Wuro
+Groupx,rice,400,Norsup
+OxFam,rice,700,Melip
+YY,yams,500,Ambrym
+XXX,tarpaulin,700,Norsup
+Red Cross,solar power kits,300,Tenmaru
+Groupt,hygiene kits,700,Fanla
+XXX,food cans,1000,Wuro
+Global,rice,2000,Wuro
+Global,soap,3000,Ambrym
+Global,hygiene kits,1000,Bunlap
+XXX,tarpaulin,500,Malekula
+Global,med kits,80,Norsup
+Blue Cross,rice,5000,Leume
+Groupx,blankets,700,Lamap
+Red Cross,taro,800,Fanla
+XXX,taro,500,Bunlap
+Global,yams,1000,Ambrym
+Groupt,solar power kits,600,Bunlap
+UN,plastic sheets,100,Fanla
+Red Cross,radio sets,500,Malekula
+OxFam,radio sets,200,Fanla
+UNICEF,buckets,500,Wuro
+UNICEF,rice,300,Wuro
+UNICEF,radio sets,250,Fanla
+Westpac,solar power kits,300,Wuro
