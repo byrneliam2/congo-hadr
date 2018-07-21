@@ -45,6 +45,24 @@ public class NgoAPI {
             e.printStackTrace();
         }
         return json;
+    }
+
+    public JSONObject getTotalResourceCount(String org) {
+        JSONObject json = new JSONObject();
+
+        try (
+            Statement statement = connection.createStatement();
+            ResultSet results = statement.executeQuery(
+                "<query goes here>")) {
+            while (results.next()) {
+                // use results.XXX() to do stuff
+            }
+            json.put("<name>", null); // use this to put values into JSON object
+        } catch (SQLException e) {
+            System.err.println("SQL Exception occurred");
+            e.printStackTrace();
+        }
+        return json;
     } 
 
 /* ======================================================================== */
