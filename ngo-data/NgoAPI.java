@@ -35,7 +35,7 @@ public class NgoAPI {
         try (
             Statement statement = connection.createStatement();
             ResultSet results = statement.executeQuery(
-                "SELECT UNIQUE Organisation FROM RESOURCES ASC")) {
+                "SELECT DISTINCT Organisation FROM RESOURCES ORDER BY Organisation ASC;")) {
             while (results.next()) {
                 list.add(results.getString("Organisation"));
             }
