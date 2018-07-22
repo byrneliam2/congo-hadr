@@ -102,10 +102,13 @@ public class CongoAPI {
                 "SELECT Organisation, Resource, SUM(Quantity) As SumQ FROM RESOURCES " +
                 "GROUP BY Organisation, Resource ORDER BY Organisation ASC;")) {
             while (results.next()) {
-                // json.put(results.getString("Resource"), results.getInt("SumQ"));
-                JSONObject j = new JSONObject();
-                j.put(results.getString("Resource"), results.getInt("SumQ"));
-                json.put(results.getString("Organisation"), j);
+                if (json.isNull(results.getString("Organisation")) {
+                    json.put(results.getString("Organisation"), 
+                        new JSONObject().put(results.getString("Resource"), results.getInt("SumQ")));
+                } else {
+                    json.get(results.getString("Organisation"))
+                        .put((results.getString("Resource"), results.getInt("SumQ")));
+                }
             }
         } catch (SQLException e) {
             System.err.println("SQL Exception occurred");
