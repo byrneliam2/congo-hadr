@@ -38,7 +38,7 @@ public class CongoAPI {
         }
     }
 
-/* ======================================================================== */
+    /* ======================= SIMPLE QUERIES: RESOURCES ====================== */
 
     /**
      * Simple query to retrieve all organisations listed in the database.
@@ -88,6 +88,30 @@ public class CongoAPI {
     }
 
     /**
+     * Retrieve resources and their counts for all organisations.
+     * Returns a JSON object that in this instance holds mappings of
+     * resource to quantity within organisations. Note that because
+     * organisations and resources are keys, this essentially returns
+     * the entire dataset.
+     */
+    public JSONObject getResourceCounts() {
+        JSONObject json = new JSONObject();
+        try (
+            Statement statement = connection.createStatement();
+            ResultSet results = statement.executeQuery(
+                "SELECT Organisation, Resource, SUM(Quantity) As SumQ FROM RESOURCES " +
+                "GROUP BY Organisation, Resource ORDER BY Organisation ASC;")) {
+            while (results.next()) {
+                json.put(results.getString("Resource"), results.getInt("SumQ"));
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL Exception occurred");
+            e.printStackTrace();
+        }
+        return json;
+    }
+
+    /**
      * Retrieve total resource count for a given organisation.
      * Returns a JSON object that in this instance holds a singleton
      * mapping with the total resource count for that organisation.
@@ -108,6 +132,30 @@ public class CongoAPI {
         }
         return json;
     }
+
+    /**
+     * Retrieve total resource counts for all organisations.
+     * Returns a JSON object that in this instance holds a singleton
+     * mapping with the total resource count for that organisation.
+     */
+    public JSONObject getTotalResourceCounts(String org) {
+        JSONObject json = new JSONObject();
+        try (
+            Statement statement = connection.createStatement();
+            ResultSet results = statement.executeQuery(
+                "SELECT Organisation, SUM(Quantity) AS SumQ FROM RESOURCES " +
+                "GROUP BY Organisation;")) {
+            while (results.next()) {
+                json.put("total", results.getInt("SumQ"));
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL Exception occurred");
+            e.printStackTrace();
+        }
+        return json;
+    }
+
+    /* ======================= STATE CHANGING: RESOURCES ====================== */
 
     /**
      * Insert a resource record for a given organisation and resource. 
@@ -282,7 +330,31 @@ public class CongoAPI {
         }
     }
 
-/* ======================================================================== */
+    /* ======================= SIMPLE QUERIES: LOCATIONS ====================== */
+
+    public JSONObject getOrganisationsAndLocations() {
+        return null;
+    }
+
+    public JSONObject getResourcesPerLocation() {
+        return null;
+    }
+
+    /* ======================= STATE CHANGING: LOCATIONS ====================== */
+
+    public void insertLocationRecord(String org, String resource, int quantity, String location) {
+        //
+    }
+
+    public void updateRecordLocation(String org, String resource, String location) {
+        //
+    }
+
+    public void deleteLocationRecord(String org, String resource, String location) {
+        //
+    }
+
+    /* ======================================================================== */
 
     public void closeDBConnection() {
         try {
