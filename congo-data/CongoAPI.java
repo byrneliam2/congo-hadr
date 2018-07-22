@@ -1,6 +1,5 @@
-import javax.swing.*;
 import java.sql.*;
-import java.time.LocalDate;
+import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 
@@ -12,11 +11,6 @@ public class CongoAPI {
 
     private Connection connection;
 
-    /**
-     * Constructor takes a user ID and password. In practice, this would be
-     * far more secure! This may not even be needed since a private system
-     * would be used as opposed to an existing enterprise system.
-     */
     public CongoAPI() {
         getConnection();
     }
@@ -25,7 +19,7 @@ public class CongoAPI {
      * Make the connection to the database. Once again, this would be
      * far different in practice.
      */
-    private void getConnection(String userid, String password) {
+    private void getConnection() {
         try {
             Class.forName("org.postgresql.Driver");
 
@@ -102,12 +96,12 @@ public class CongoAPI {
                 "SELECT Organisation, Resource, SUM(Quantity) As SumQ FROM RESOURCES " +
                 "GROUP BY Organisation, Resource ORDER BY Organisation ASC;")) {
             while (results.next()) {
-                if (json.isNull(results.getString("Organisation")) {
+                if (json.get(results.getString("Organisation")) == null) {
                     json.put(results.getString("Organisation"), 
                         new JSONObject().put(results.getString("Resource"), results.getInt("SumQ")));
                 } else {
-                    json.get(results.getString("Organisation"))
-                        .put((results.getString("Resource"), results.getInt("SumQ")));
+                    ((JSONObject) json.get(results.getString("Organisation")))
+                        .put(results.getString("Resource"), results.getInt("SumQ"));
                 }
             }
         } catch (SQLException e) {
@@ -170,13 +164,13 @@ public class CongoAPI {
      * Insert a resource record for a given organisation and resource. 
      */
     public void insertResourceRecord(String org, String resource, int quantity, String description) {
-        String vals = "\'" + org + "\',\'" + resource + "\'," + quantity + ",\'" + description "\'";
+        String vals = "\'" + org + "\',\'" + resource + "\'," + quantity + ",\'" + description + "\'";
         
         try {
             connection.setAutoCommit(false);
 
             Statement statement1 = connection.createStatement();
-            ResultSet results1 = statement.executeQuery(
+            ResultSet results1 = statement1.executeQuery(
                 "SELECT * FROM RESOURCES " + "WHERE Organisation = " + org + 
                 " AND Resource = " + resource + " FOR UPDATE;");
 
@@ -196,14 +190,13 @@ public class CongoAPI {
             results1.close();
             statement1.close();
         } catch (CongoAPIException e) {
-            output.append("Error: ").append(e.getMessage());
+            System.err.println("Error: " + e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException e1) {
                 System.err.println("SQL Exception occurred during rollback");
                 e1.printStackTrace();
             }
-            return output.toString();
         } catch (SQLException e) {
             System.err.println("SQL Exception occurred during Delete Customer");
             e.printStackTrace();
@@ -233,7 +226,7 @@ public class CongoAPI {
             connection.setAutoCommit(false);
 
             Statement statement1 = connection.createStatement();
-            ResultSet results1 = statement.executeQuery(
+            ResultSet results1 = statement1.executeQuery(
                 "SELECT * FROM RESOURCES " + "WHERE Organisation = " + org + 
                 " AND Resource = " + resource + " FOR UPDATE;");
 
@@ -254,14 +247,13 @@ public class CongoAPI {
             results1.close();
             statement1.close();
         } catch (CongoAPIException e) {
-            output.append("Error: ").append(e.getMessage());
+            System.err.println("Error: " + e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException e1) {
                 System.err.println("SQL Exception occurred during rollback");
                 e1.printStackTrace();
             }
-            return output.toString();
         } catch (SQLException e) {
             System.err.println("SQL Exception occurred");
             e.printStackTrace();
@@ -291,7 +283,7 @@ public class CongoAPI {
             connection.setAutoCommit(false);
 
             Statement statement1 = connection.createStatement();
-            ResultSet results1 = statement.executeQuery(
+            ResultSet results1 = statement1.executeQuery(
                 "SELECT * FROM RESOURCES " + "WHERE Organisation = " + org + 
                 " AND Resource = " + resource + " FOR UPDATE;");
 
@@ -312,14 +304,13 @@ public class CongoAPI {
             results1.close();
             statement1.close();
         } catch (CongoAPIException e) {
-            output.append("Error: ").append(e.getMessage());
+            System.err.println("Error: " + e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException e1) {
                 System.err.println("SQL Exception occurred during rollback");
                 e1.printStackTrace();
             }
-            return output.toString();
         } catch (SQLException e) {
             System.err.println("SQL Exception occurred during Delete Customer");
             e.printStackTrace();
