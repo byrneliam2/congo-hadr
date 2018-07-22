@@ -5,6 +5,9 @@ Repo for prototypes as part of Techstars Startup Weekend Wellington 2018. The th
 Disaster relief has the potential to suffer from lack of organisation, synergy, collaboration, coordination and communication as the non-government organisations (NGOs) that participate are typically competing against each other. As a result, they rarely work together to solve problems as they are more focused on the funding, PR and prestige they receive from controlling operations without assistance.
 
 ## Our Solution
+
+![CoNGO logo](resources/congo_full.png)
+
 We aim to improve HADR operations by proposing **CoNGO**, a specialised data storage platform for disaster relief management. Currently, disaster management offices (DMOs) are responsible for controlling data and resources regarding NGOs and humanitarian services. CoNGO will comprise an underlying database which is accessible via a dedicated API or a supplementary application. The API is designed to be accessible by existing applications already in use by NGOs. Alternatively, the application may be used to get a more natural experience working with the database.
 
 ## My Role
