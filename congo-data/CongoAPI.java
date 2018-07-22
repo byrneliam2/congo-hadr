@@ -110,6 +110,63 @@ public class CongoAPI {
     }
 
     /**
+     * Insert a resource record for a given organisation and resource. 
+     */
+    public void insertResourceRecord(String org, String resource, int quantity, String description) {
+        String vals = "\'" + org + "\',\'" + resource + "\'," + quantity + ",\'" + description "\'";
+        
+        try {
+            connection.setAutoCommit(false);
+
+            Statement statement1 = connection.createStatement();
+            ResultSet results1 = statement.executeQuery(
+                "SELECT * FROM RESOURCES " + "WHERE Organisation = " + org + 
+                " AND Resource = " + resource + " FOR UPDATE;");
+
+            if (!results1.next()) {
+                throw new CongoAPIException
+                        ("Resource record already exists with values [org = " + org +
+                        ", resource = " + resource + "]. Try updating the record instead.");
+            }
+
+            Statement statement2 = connection.createStatement();
+            statement2.executeUpdate("INSERT INTO RESOURCES " +
+                    "VALUES (" + vals + ");");
+
+            connection.commit();
+
+            statement2.close();
+            results1.close();
+            statement1.close();
+        } catch (CongoAPIException e) {
+            output.append("Error: ").append(e.getMessage());
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                System.err.println("SQL Exception occurred during rollback");
+                e1.printStackTrace();
+            }
+            return output.toString();
+        } catch (SQLException e) {
+            System.err.println("SQL Exception occurred during Delete Customer");
+            e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                System.err.println("SQL Exception occurred during rollback");
+                e1.printStackTrace();
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println("SQL Exception occurred during setting of auto commit");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
      * Update the resource count for a given organisation and resource to
      * the quantity supplied. This method will throw an exception if the
      * organisation/resource combination does not exist.
@@ -172,7 +229,7 @@ public class CongoAPI {
      * This method will throw an exception if the organisation/resource 
      * combination does not exist.
      */
-    public String deleteResourceRecord(String org, String resource) {
+    public void deleteResourceRecord(String org, String resource) {
         try {
             connection.setAutoCommit(false);
 
@@ -223,7 +280,6 @@ public class CongoAPI {
                 e.printStackTrace();
             }
         }
-        return output.toString();
     }
 
 /* ======================================================================== */
