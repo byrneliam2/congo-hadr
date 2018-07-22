@@ -17,8 +17,8 @@ public class CongoAPI {
      * far more secure! This may not even be needed since a private system
      * would be used as opposed to an existing enterprise system.
      */
-    public CongoAPI(String userid, String password) {
-        getConnection(userid, password);
+    public CongoAPI() {
+        getConnection();
     }
 
     /**
@@ -30,7 +30,7 @@ public class CongoAPI {
             Class.forName("org.postgresql.Driver");
 
             String url = "jdbc:postgresql://db.ecs.vuw.ac.nz/congo-hadr";
-            this.connection = DriverManager.getConnection(url, userid, password);
+            this.connection = DriverManager.getConnection(url);
         } catch (ClassNotFoundException e) {
             System.err.println("Cannot find the PostgreSQL driver. Try checking your CLASSPATH.");
         } catch (SQLException e) {
