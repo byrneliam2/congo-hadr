@@ -23,7 +23,7 @@ On the technical side, this repo contains a simple PostgreSQL database setup and
 - F6S site: https://www.f6s.com/profile/2723594/about
 
 ### Contributors to this repo
-- Liam Byrne (github.com/byrneliam2)
-- Richard Jiang (github.com/rjiang43)
+- Liam Byrne (https://github.com/byrneliam2)
+- Richard Jiang (https://github.com/rjiang43)
 
 See the F6S page for the whole team!
